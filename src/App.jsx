@@ -101,13 +101,13 @@ function App() {
             position: relative;
         }
 
-        /* MOBILE FIX: Center children and move text to top empty space */
+        /* MOBILE FIX: Shift image 70% to reveal all 3 children */
         @media (max-width: 768px) {
             .hero-banner {
-                height: 70vh; /* Taller hero to show more of the children */
-                background-position: center !important; /* BRINGS ALL 3 CHILDREN TO THE MIDDLE */
-                align-items: flex-start !important; /* MOVES TEXT TO THE TOP "SKY" AREA */
-                padding-top: 40px;
+                height: 65vh; 
+                background-position: 70% center !important; 
+                align-items: flex-start !important; 
+                padding-top: 50px;
             }
         }
 
@@ -115,8 +115,8 @@ function App() {
             content: "";
             position: absolute;
             inset: 0;
-            /* Lighter gradient so children stay visible */
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 40%);
+            /* Gradient optimized to keep text clear on the left side */
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.2) 60%, transparent 100%);
         }
 
         .welcome-bubble {
@@ -202,10 +202,10 @@ function App() {
         </nav>
       </header>
 
-      {/* 3. HERO SECTION (CENTERED CHILDREN) */}
+      {/* 3. HERO SECTION (FOCUSED ON ALL 3 CHILDREN) */}
       <section id="home" className="hero-banner relative">
-        {/* Text stays at the top where it's empty to avoid faces */}
-        <div className="px-6 md:ml-8 max-w-[95%] md:max-w-[700px] z-10 text-left">
+        {/* max-w-[65%] on mobile ensures 3 lines and stays clear of the trio */}
+        <div className="px-6 md:ml-8 max-w-[65%] md:max-w-[700px] z-10 text-left">
           <h1 className="text-[20px] md:text-[54px] font-[1000] leading-[1.2] md:leading-[1.05] uppercase mb-2 md:mb-4 min-h-[4em] md:min-h-[3.2em]">
             <Typewriter texts={["WHERE EVERY CHILD\nGROWS WITH\nWONDER."]} />
           </h1>
@@ -219,12 +219,12 @@ function App() {
             <h2 className="welcome-bubble text-xs md:text-5xl uppercase tracking-tighter">Welcome to Kalpavruksha</h2>
         </div>
         <p className="text-[10px] md:text-2xl font-bold text-[#b58d67] uppercase tracking-[0.2em] md:tracking-[0.3em] mb-6 md:mb-10">Early learning centre</p>
-        <div className="max-w-4xl mx-auto text-[10px] md:text-xl font-bold text-gray-500 leading-relaxed px-4">
+        <div className="max-w-4xl mx-auto text-[11px] md:text-xl font-bold text-gray-500 leading-relaxed px-4">
           Helping children learn to do it themselves and discover the joy of growing.
         </div>
       </section>
 
-      {/* ... Remaining sections (Programs, Gallery, Tuition, Footer) ... */}
+      {/* 5. PROGRAMS SECTION */}
       <section id="programs" className="bg-[#f28d7d] py-12 md:py-24 px-6 text-white text-center">
         <h2 className="text-xl md:text-4xl font-black uppercase mb-8 md:mb-12 tracking-widest">Our Programs</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-6xl mx-auto">
@@ -235,23 +235,6 @@ function App() {
             </div>
           ))}
         </div>
-      </section>
-
-      <section id="gallery" className="bg-[#f0fdf4] py-12 md:py-24 px-4">
-        <h2 className="text-xl md:text-4xl font-black text-[#143611] text-center mb-8 uppercase tracking-tighter">Our Gallery</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 max-w-7xl mx-auto">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="w-full aspect-square bg-white rounded-[15px] md:rounded-[30px] overflow-hidden shadow-md border-2 md:border-4 border-white transition-transform active:scale-95">
-              <img src="/flex.png" alt="Gallery" className="w-full h-full object-cover" />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="tuition" className="bg-[#143611] py-12 px-6 text-white text-center md:rounded-[60px] md:mx-4 mb-10 md:mb-20 shadow-2xl">
-        <h2 className="text-xl md:text-5xl font-black uppercase mb-1">Tuition Centre</h2>
-        <p className="text-[#90d2be] font-bold text-[9px] md:text-lg uppercase tracking-widest mb-6 italic">1st to 10th Standard</p>
-        <button onClick={() => setShowForm(true)} className="bg-[#f28d7d] text-white px-8 py-3 rounded-full font-black uppercase text-[10px] md:text-xs shadow-xl active:scale-95 transition-transform">Enroll Now</button>
       </section>
 
       <footer className="bg-[#143611] py-8 md:py-10 text-center text-gray-500 text-[7px] md:text-[8px] font-black uppercase tracking-[0.2em]">
