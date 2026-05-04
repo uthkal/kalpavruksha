@@ -101,12 +101,14 @@ function App() {
             position: relative;
         }
 
-        /* MOBILE FIX: Crop 4th child and keep text in 3 lines */
+        /* MOBILE FIX: SHOW LEFT 3 KIDS ON THE RIGHT SIDE */
         @media (max-width: 768px) {
             .hero-banner {
-                height: 60vh; 
-                background-position: 20% center !important; /* Shows first 3 children, ignores 4th on the right */
-                align-items: flex-start !important; /* Moves text to the top safe zone */
+                height: 55vh; 
+                /* Focus on left 15% of the original photo (Kids 1-3) */
+                background-position: 15% center !important; 
+                justify-content: flex-start !important;
+                align-items: flex-start !important;
                 padding-top: 50px;
             }
         }
@@ -115,7 +117,8 @@ function App() {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+            /* Strong white fade on the left to keep text readable in the sky/empty space */
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
         }
 
         .welcome-bubble {
@@ -131,10 +134,11 @@ function App() {
         @media (min-width: 1024px) { 
             .welcome-bubble { 
                 padding: 18px 60px;
-                word-spacing: 0.24in !important; /* 0.24-INCH SPACING */
+                word-spacing: 0.24in !important; /* STRICT 0.24-INCH SPACING */
             } 
         }
 
+        /* CONTINUOUS RED TICKER */
         @keyframes scrollTicker {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
@@ -155,7 +159,7 @@ function App() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
 
-      {/* 1. TOP INFO BAR (STABLE SIDES) */}
+      {/* 1. TOP INFO BAR (LOCATION LEFT | TICKER CENTER | WHATSAPP RIGHT) */}
       <div className="bg-[#FFD56B] text-[#143611] py-1.5 md:py-2 px-3 md:px-4 flex items-center justify-between text-[7px] md:text-[11px] font-black uppercase shadow-inner border-b border-[#e6c060]">
         <div className="flex items-center gap-1 md:gap-1.5 shrink-0 z-10 font-bold">
           <span className="text-[10px] md:text-[14px]">📍</span>
@@ -176,7 +180,7 @@ function App() {
         </a>
       </div>
 
-      {/* 2. HEADER */}
+      {/* 2. HEADER (ULTRA SLIM) */}
       <header className="sticky top-0 w-full z-[100] bg-white/95 backdrop-blur-md shadow-sm border-b">
         <nav className="flex justify-between items-center px-2 md:px-8 py-0.5">
           <div className="flex items-center gap-1 md:gap-2 cursor-pointer mr-2 md:mr-8" onClick={() => scrollTo('home')}>
@@ -198,18 +202,18 @@ function App() {
         </nav>
       </header>
 
-      {/* 3. HERO SECTION (3-LINE MOBILE FIX) */}
+      {/* 3. HERO SECTION (3-LINE MOBILE TEXT IN SKY ZONE) */}
       <section id="home" className="hero-banner relative">
-        {/* max-w-[85%] ensures the text stays in 3 lines while left alignment clears faces */}
-        <div className="px-4 ml-1 md:ml-8 max-w-[85%] md:max-w-[700px] z-10">
-          <h1 className="text-[21px] md:text-[54px] font-[1000] leading-[1.1] md:leading-[1.05] uppercase mb-1 md:mb-4 min-h-[4em] md:min-h-[3.2em]">
+        {/* max-w-[65%] keeps text strictly in 3 lines while left aligned clears the children on the right */}
+        <div className="px-4 ml-1 md:ml-8 max-w-[65%] md:max-w-[700px] z-10">
+          <h1 className="text-[20px] md:text-[54px] font-[1000] leading-[1.15] md:leading-[1.05] uppercase mb-1 md:mb-4 min-h-[4em] md:min-h-[3.2em]">
             <Typewriter texts={["WHERE EVERY CHILD\nGROWS WITH\nWONDER."]} />
           </h1>
           <p className="text-[9px] md:text-lg font-bold text-[#444] italic">Premium Montessori & Expert Tutoring.</p>
         </div>
       </section>
 
-      {/* 4. ABOUT SECTION */}
+      {/* 4. ABOUT SECTION (0.24-INCH SPACING FOR BENGALURU PARENTS) */}
       <section id="about" className="py-12 md:py-24 px-6 text-center">
         <div className="mb-6 md:mb-8">
             <h2 className="welcome-bubble text-xs md:text-5xl uppercase tracking-tighter">Welcome to Kalpavruksha</h2>
@@ -220,7 +224,7 @@ function App() {
         </div>
       </section>
 
-      {/* ... Rest of the sections (Programs, Gallery, Tuition) remain the same ... */}
+      {/* 5. PROGRAMS SECTION */}
       <section id="programs" className="bg-[#f28d7d] py-12 md:py-24 px-6 text-white text-center">
         <h2 className="text-xl md:text-4xl font-black uppercase mb-8 md:mb-12 tracking-widest">Our Programs</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-6xl mx-auto">
@@ -233,6 +237,7 @@ function App() {
         </div>
       </section>
 
+      {/* 6. GALLERY SECTION */}
       <section id="gallery" className="bg-[#f0fdf4] py-12 md:py-24 px-4">
         <h2 className="text-xl md:text-4xl font-black text-[#143611] text-center mb-8 uppercase tracking-tighter">Our Gallery</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 max-w-7xl mx-auto">
@@ -244,6 +249,7 @@ function App() {
         </div>
       </section>
 
+      {/* 7. TUITION SECTION */}
       <section id="tuition" className="bg-[#143611] py-12 px-6 text-white text-center md:rounded-[60px] md:mx-4 mb-10 md:mb-20 shadow-2xl">
         <h2 className="text-xl md:text-5xl font-black uppercase mb-1">Tuition Centre</h2>
         <p className="text-[#90d2be] font-bold text-[9px] md:text-lg uppercase tracking-widest mb-6 italic">1st to 10th Standard</p>
