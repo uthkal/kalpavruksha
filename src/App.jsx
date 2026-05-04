@@ -101,13 +101,13 @@ function App() {
             position: relative;
         }
 
-        /* MOBILE FIX: Vertical and Horizontal Shift */
+        /* MOBILE FIX: Crop 4th child and keep text in 3 lines */
         @media (max-width: 768px) {
             .hero-banner {
                 height: 60vh; 
-                background-position: right center !important; /* Forces children to the right */
-                align-items: flex-start !important; /* Moves text to the top */
-                padding-top: 40px; /* Space from the header */
+                background-position: 20% center !important; /* Shows first 3 children, ignores 4th on the right */
+                align-items: flex-start !important; /* Moves text to the top safe zone */
+                padding-top: 50px;
             }
         }
 
@@ -115,7 +115,6 @@ function App() {
             content: "";
             position: absolute;
             inset: 0;
-            /* Stronger white gradient on the left to hide the photo background behind text */
             background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
         }
 
@@ -132,11 +131,10 @@ function App() {
         @media (min-width: 1024px) { 
             .welcome-bubble { 
                 padding: 18px 60px;
-                word-spacing: 0.24in !important; 
+                word-spacing: 0.24in !important; /* 0.24-INCH SPACING */
             } 
         }
 
-        /* CONTINUOUS RED TICKER */
         @keyframes scrollTicker {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
@@ -157,26 +155,24 @@ function App() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
 
-      {/* 1. TOP INFO BAR */}
+      {/* 1. TOP INFO BAR (STABLE SIDES) */}
       <div className="bg-[#FFD56B] text-[#143611] py-1.5 md:py-2 px-3 md:px-4 flex items-center justify-between text-[7px] md:text-[11px] font-black uppercase shadow-inner border-b border-[#e6c060]">
         <div className="flex items-center gap-1 md:gap-1.5 shrink-0 z-10 font-bold">
           <span className="text-[10px] md:text-[14px]">📍</span>
-          <span className="hidden xs:inline">laggere , bengaluru</span>
-          <span className="xs:hidden">Laggere</span>
+          <span>laggere , bengaluru</span>
         </div>
 
         <div className="ticker-wrapper">
           <div className="ticker-content font-sans tracking-tight md:tracking-normal uppercase">
-            <span className="mx-6 md:mx-10">kalpavruksha , Early learning centre admission open for acadamic year 2026-27</span>
+            <span className="mx-6 md:mx-10 text-red-700">kalpavruksha , Early learning centre admission open for acadamic year 2026-27</span>
             <span className="mx-12 md:mx-20 text-gray-400 opacity-30">●</span>
-            <span className="mx-6 md:mx-10">kalpavruksha , Early learning centre admission open for acadamic year 2026-27</span>
+            <span className="mx-6 md:mx-10 text-red-700">kalpavruksha , Early learning centre admission open for acadamic year 2026-27</span>
           </div>
         </div>
 
         <a href="https://wa.me/919902962379" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 md:gap-1.5 shrink-0 z-10 font-bold">
           <span className="text-[10px] md:text-[14px]">📞</span>
-          <span className="hidden xs:inline">+91 99029 62379</span>
-          <span className="xs:hidden">CHAT</span>
+          <span>+91 99029 62379</span>
         </a>
       </div>
 
@@ -202,14 +198,14 @@ function App() {
         </nav>
       </header>
 
-      {/* 3. HERO SECTION (AGGRESSIVE MOBILE FIX) */}
+      {/* 3. HERO SECTION (3-LINE MOBILE FIX) */}
       <section id="home" className="hero-banner relative">
-        {/* max-w-[50%] and shift to top ensures text stays in the empty sky/wall area of the image */}
-        <div className="px-4 ml-1 md:ml-8 max-w-[50%] md:max-w-[700px] z-10">
-          <h1 className="text-[18px] md:text-[54px] font-[1000] leading-[1.2] md:leading-[1.05] uppercase mb-1 md:mb-4 min-h-[4em] md:min-h-[3.2em]">
+        {/* max-w-[85%] ensures the text stays in 3 lines while left alignment clears faces */}
+        <div className="px-4 ml-1 md:ml-8 max-w-[85%] md:max-w-[700px] z-10">
+          <h1 className="text-[21px] md:text-[54px] font-[1000] leading-[1.1] md:leading-[1.05] uppercase mb-1 md:mb-4 min-h-[4em] md:min-h-[3.2em]">
             <Typewriter texts={["WHERE EVERY CHILD\nGROWS WITH\nWONDER."]} />
           </h1>
-          <p className="text-[8px] md:text-lg font-bold text-[#444] italic">Premium Montessori & Expert Tutoring.</p>
+          <p className="text-[9px] md:text-lg font-bold text-[#444] italic">Premium Montessori & Expert Tutoring.</p>
         </div>
       </section>
 
@@ -224,7 +220,7 @@ function App() {
         </div>
       </section>
 
-      {/* 5. PROGRAMS SECTION */}
+      {/* ... Rest of the sections (Programs, Gallery, Tuition) remain the same ... */}
       <section id="programs" className="bg-[#f28d7d] py-12 md:py-24 px-6 text-white text-center">
         <h2 className="text-xl md:text-4xl font-black uppercase mb-8 md:mb-12 tracking-widest">Our Programs</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-6xl mx-auto">
@@ -237,7 +233,6 @@ function App() {
         </div>
       </section>
 
-      {/* 6. GALLERY SECTION */}
       <section id="gallery" className="bg-[#f0fdf4] py-12 md:py-24 px-4">
         <h2 className="text-xl md:text-4xl font-black text-[#143611] text-center mb-8 uppercase tracking-tighter">Our Gallery</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 max-w-7xl mx-auto">
@@ -249,7 +244,6 @@ function App() {
         </div>
       </section>
 
-      {/* 7. TUITION SECTION */}
       <section id="tuition" className="bg-[#143611] py-12 px-6 text-white text-center md:rounded-[60px] md:mx-4 mb-10 md:mb-20 shadow-2xl">
         <h2 className="text-xl md:text-5xl font-black uppercase mb-1">Tuition Centre</h2>
         <p className="text-[#90d2be] font-bold text-[9px] md:text-lg uppercase tracking-widest mb-6 italic">1st to 10th Standard</p>
