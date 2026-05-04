@@ -101,15 +101,13 @@ function App() {
             position: relative;
         }
 
-        /* MOBILE FIX: SHOW LEFT 3 KIDS ON THE RIGHT SIDE */
+        /* MOBILE FIX: Center children and move text to top empty space */
         @media (max-width: 768px) {
             .hero-banner {
-                height: 55vh; 
-                /* Focus on left 15% of the original photo (Kids 1-3) */
-                background-position: 15% center !important; 
-                justify-content: flex-start !important;
-                align-items: flex-start !important;
-                padding-top: 50px;
+                height: 70vh; /* Taller hero to show more of the children */
+                background-position: center !important; /* BRINGS ALL 3 CHILDREN TO THE MIDDLE */
+                align-items: flex-start !important; /* MOVES TEXT TO THE TOP "SKY" AREA */
+                padding-top: 40px;
             }
         }
 
@@ -117,8 +115,8 @@ function App() {
             content: "";
             position: absolute;
             inset: 0;
-            /* Strong white fade on the left to keep text readable in the sky/empty space */
-            background: linear-gradient(to right, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+            /* Lighter gradient so children stay visible */
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 40%);
         }
 
         .welcome-bubble {
@@ -134,7 +132,7 @@ function App() {
         @media (min-width: 1024px) { 
             .welcome-bubble { 
                 padding: 18px 60px;
-                word-spacing: 0.24in !important; /* STRICT 0.24-INCH SPACING */
+                word-spacing: 0.24in !important; 
             } 
         }
 
@@ -147,7 +145,7 @@ function App() {
             flex: 1;
             overflow: hidden;
             white-space: nowrap;
-            margin: 0 10px;
+            margin: 0 15px;
         }
         .ticker-content {
             display: inline-block;
@@ -159,28 +157,30 @@ function App() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
 
-      {/* 1. TOP INFO BAR (LOCATION LEFT | TICKER CENTER | WHATSAPP RIGHT) */}
-      <div className="bg-[#FFD56B] text-[#143611] py-1.5 md:py-2 px-3 md:px-4 flex items-center justify-between text-[7px] md:text-[11px] font-black uppercase shadow-inner border-b border-[#e6c060]">
-        <div className="flex items-center gap-1 md:gap-1.5 shrink-0 z-10 font-bold">
+      {/* 1. TOP INFO BAR */}
+      <div className="bg-[#FFD56B] text-[#143611] py-1.5 md:py-2 px-4 flex items-center justify-between text-[8px] md:text-[11px] font-black uppercase shadow-inner border-b border-[#e6c060]">
+        <div className="flex items-center gap-1.5 shrink-0 z-10 font-bold">
           <span className="text-[10px] md:text-[14px]">📍</span>
-          <span>laggere , bengaluru</span>
+          <span className="hidden xs:inline">laggere , bengaluru</span>
+          <span className="xs:hidden">Laggere</span>
         </div>
 
         <div className="ticker-wrapper">
           <div className="ticker-content font-sans tracking-tight md:tracking-normal uppercase">
-            <span className="mx-6 md:mx-10 text-red-700">kalpavruksha , Early learning centre admission open for acadamic year 2026-27</span>
-            <span className="mx-12 md:mx-20 text-gray-400 opacity-30">●</span>
-            <span className="mx-6 md:mx-10 text-red-700">kalpavruksha , Early learning centre admission open for acadamic year 2026-27</span>
+            <span className="mx-8">kalpavruksha , Early learning centre admission open for acadamic year 2026-27</span>
+            <span className="mx-20 text-gray-400 opacity-30">●</span>
+            <span className="mx-8">kalpavruksha , Early learning centre admission open for acadamic year 2026-27</span>
           </div>
         </div>
 
-        <a href="https://wa.me/919902962379" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 md:gap-1.5 shrink-0 z-10 font-bold">
+        <a href="https://wa.me/919902962379" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 shrink-0 z-10 font-bold">
           <span className="text-[10px] md:text-[14px]">📞</span>
-          <span>+91 99029 62379</span>
+          <span className="hidden xs:inline">+91 99029 62379</span>
+          <span className="xs:hidden">CHAT</span>
         </a>
       </div>
 
-      {/* 2. HEADER (ULTRA SLIM) */}
+      {/* 2. HEADER */}
       <header className="sticky top-0 w-full z-[100] bg-white/95 backdrop-blur-md shadow-sm border-b">
         <nav className="flex justify-between items-center px-2 md:px-8 py-0.5">
           <div className="flex items-center gap-1 md:gap-2 cursor-pointer mr-2 md:mr-8" onClick={() => scrollTo('home')}>
@@ -202,29 +202,29 @@ function App() {
         </nav>
       </header>
 
-      {/* 3. HERO SECTION (3-LINE MOBILE TEXT IN SKY ZONE) */}
+      {/* 3. HERO SECTION (CENTERED CHILDREN) */}
       <section id="home" className="hero-banner relative">
-        {/* max-w-[65%] keeps text strictly in 3 lines while left aligned clears the children on the right */}
-        <div className="px-4 ml-1 md:ml-8 max-w-[65%] md:max-w-[700px] z-10">
-          <h1 className="text-[20px] md:text-[54px] font-[1000] leading-[1.15] md:leading-[1.05] uppercase mb-1 md:mb-4 min-h-[4em] md:min-h-[3.2em]">
+        {/* Text stays at the top where it's empty to avoid faces */}
+        <div className="px-6 md:ml-8 max-w-[95%] md:max-w-[700px] z-10 text-left">
+          <h1 className="text-[20px] md:text-[54px] font-[1000] leading-[1.2] md:leading-[1.05] uppercase mb-2 md:mb-4 min-h-[4em] md:min-h-[3.2em]">
             <Typewriter texts={["WHERE EVERY CHILD\nGROWS WITH\nWONDER."]} />
           </h1>
           <p className="text-[9px] md:text-lg font-bold text-[#444] italic">Premium Montessori & Expert Tutoring.</p>
         </div>
       </section>
 
-      {/* 4. ABOUT SECTION (0.24-INCH SPACING FOR BENGALURU PARENTS) */}
+      {/* 4. ABOUT SECTION */}
       <section id="about" className="py-12 md:py-24 px-6 text-center">
         <div className="mb-6 md:mb-8">
             <h2 className="welcome-bubble text-xs md:text-5xl uppercase tracking-tighter">Welcome to Kalpavruksha</h2>
         </div>
         <p className="text-[10px] md:text-2xl font-bold text-[#b58d67] uppercase tracking-[0.2em] md:tracking-[0.3em] mb-6 md:mb-10">Early learning centre</p>
-        <div className="max-w-4xl mx-auto text-[11px] md:text-xl font-bold text-gray-500 leading-relaxed px-4">
+        <div className="max-w-4xl mx-auto text-[10px] md:text-xl font-bold text-gray-500 leading-relaxed px-4">
           Helping children learn to do it themselves and discover the joy of growing.
         </div>
       </section>
 
-      {/* 5. PROGRAMS SECTION */}
+      {/* ... Remaining sections (Programs, Gallery, Tuition, Footer) ... */}
       <section id="programs" className="bg-[#f28d7d] py-12 md:py-24 px-6 text-white text-center">
         <h2 className="text-xl md:text-4xl font-black uppercase mb-8 md:mb-12 tracking-widest">Our Programs</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-6xl mx-auto">
@@ -237,7 +237,6 @@ function App() {
         </div>
       </section>
 
-      {/* 6. GALLERY SECTION */}
       <section id="gallery" className="bg-[#f0fdf4] py-12 md:py-24 px-4">
         <h2 className="text-xl md:text-4xl font-black text-[#143611] text-center mb-8 uppercase tracking-tighter">Our Gallery</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 max-w-7xl mx-auto">
@@ -249,7 +248,6 @@ function App() {
         </div>
       </section>
 
-      {/* 7. TUITION SECTION */}
       <section id="tuition" className="bg-[#143611] py-12 px-6 text-white text-center md:rounded-[60px] md:mx-4 mb-10 md:mb-20 shadow-2xl">
         <h2 className="text-xl md:text-5xl font-black uppercase mb-1">Tuition Centre</h2>
         <p className="text-[#90d2be] font-bold text-[9px] md:text-lg uppercase tracking-widest mb-6 italic">1st to 10th Standard</p>
