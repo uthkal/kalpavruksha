@@ -101,11 +101,13 @@ function App() {
             position: relative;
         }
 
-        /* MOBILE FIX: Move children to the right and keep text left */
+        /* MOBILE FIX: Vertical and Horizontal Shift */
         @media (max-width: 768px) {
             .hero-banner {
-                height: 55vh; 
-                background-position: 95% center !important; /* Pushes children to the right side */
+                height: 60vh; 
+                background-position: right center !important; /* Forces children to the right */
+                align-items: flex-start !important; /* Moves text to the top */
+                padding-top: 40px; /* Space from the header */
             }
         }
 
@@ -113,7 +115,8 @@ function App() {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.1) 80%, transparent 100%);
+            /* Stronger white gradient on the left to hide the photo background behind text */
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
         }
 
         .welcome-bubble {
@@ -150,6 +153,8 @@ function App() {
             color: #d00000;
             font-weight: 800;
         }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
 
       {/* 1. TOP INFO BAR */}
@@ -181,7 +186,7 @@ function App() {
           <div className="flex items-center gap-1 md:gap-2 cursor-pointer mr-2 md:mr-8" onClick={() => scrollTo('home')}>
             <img src="/logo.png" alt="Logo" className="h-[30px] md:h-[76px] w-auto object-contain" />
             <div className="text-left">
-              <span className="text-[8px] md:text-[15px] font-black text-[#56a890] block uppercase leading-none">KALPAVRUKSHA</span>
+              <span className="text-[10px] md:text-[15px] font-black text-[#56a890] block uppercase leading-none">KALPAVRUKSHA</span>
               <span className="text-[4px] md:text-[8px] text-gray-400 font-bold uppercase block mt-0.5">Early Learning Centre</span>
             </div>
           </div>
@@ -197,14 +202,14 @@ function App() {
         </nav>
       </header>
 
-      {/* 3. HERO SECTION (FIXED FOR MOBILE FACE OVERLAP) */}
+      {/* 3. HERO SECTION (AGGRESSIVE MOBILE FIX) */}
       <section id="home" className="hero-banner relative">
-        {/* max-w-[60%] on mobile keeps the text in a tight column on the left */}
-        <div className="px-4 ml-1 md:ml-8 max-w-[60%] md:max-w-[700px] z-10">
-          <h1 className="text-[19px] md:text-[54px] font-[1000] leading-[1.2] md:leading-[1.05] uppercase mb-2 md:mb-4 min-h-[4.5em] md:min-h-[3.2em]">
+        {/* max-w-[50%] and shift to top ensures text stays in the empty sky/wall area of the image */}
+        <div className="px-4 ml-1 md:ml-8 max-w-[50%] md:max-w-[700px] z-10">
+          <h1 className="text-[18px] md:text-[54px] font-[1000] leading-[1.2] md:leading-[1.05] uppercase mb-1 md:mb-4 min-h-[4em] md:min-h-[3.2em]">
             <Typewriter texts={["WHERE EVERY CHILD\nGROWS WITH\nWONDER."]} />
           </h1>
-          <p className="text-[9px] md:text-lg font-bold text-[#444] italic">Premium Montessori & Expert Tutoring Center.</p>
+          <p className="text-[8px] md:text-lg font-bold text-[#444] italic">Premium Montessori & Expert Tutoring.</p>
         </div>
       </section>
 
@@ -214,7 +219,7 @@ function App() {
             <h2 className="welcome-bubble text-xs md:text-5xl uppercase tracking-tighter">Welcome to Kalpavruksha</h2>
         </div>
         <p className="text-[10px] md:text-2xl font-bold text-[#b58d67] uppercase tracking-[0.2em] md:tracking-[0.3em] mb-6 md:mb-10">Early learning centre</p>
-        <div className="max-w-4xl mx-auto text-[10px] md:text-xl font-bold text-gray-500 leading-relaxed px-4">
+        <div className="max-w-4xl mx-auto text-[11px] md:text-xl font-bold text-gray-500 leading-relaxed px-4">
           Helping children learn to do it themselves and discover the joy of growing.
         </div>
       </section>
