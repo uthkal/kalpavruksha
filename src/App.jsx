@@ -3,36 +3,30 @@ import { db, auth } from './firebase';
 import { collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "firebase/firestore";
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 
-// --- FIXED & PROTECTED TYPEWRITER COMPONENT ---
+// --- PROTECTED TYPEWRITER ---
 const Typewriter = ({ texts }) => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [reverse, setReverse] = useState(false);
 
   useEffect(() => {
-    if (index >= texts.length) {
-      setIndex(0);
-    }
+    if (index >= texts.length) setIndex(0);
   }, [texts, index]);
 
   useEffect(() => {
     if (!texts[index]) return;
-
     if (subIndex === texts[index].length + 1 && !reverse) {
       const timeout = setTimeout(() => setReverse(true), 2500);
       return () => clearTimeout(timeout);
     }
-
     if (subIndex === 0 && reverse) {
       setReverse(false);
       setIndex((prev) => (prev + 1) % texts.length);
       return;
     }
-
     const timeout = setTimeout(() => {
       setSubIndex((prev) => prev + (reverse ? -1 : 1));
     }, reverse ? 30 : 80);
-
     return () => clearTimeout(timeout);
   }, [subIndex, index, reverse, texts]);
 
@@ -104,7 +98,7 @@ export default function App() {
   const scrollTo = (id) => {
     const element = document.getElementById(id);
     if (element) {
-      window.scrollTo({ top: element.offsetTop - 60, behavior: 'smooth' });
+      window.scrollTo({ top: element.offsetTop - 120, behavior: 'smooth' });
       setActiveSection(id);
       setOpenFacilities(false);
     }
@@ -117,7 +111,7 @@ export default function App() {
       <div className="min-h-screen bg-gray-50 p-4 md:p-6 font-sans">
         <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
           <div className="bg-[#143611] p-6 text-white flex justify-between items-center">
-            <h1 className="font-black uppercase text-xs md:text-base tracking-tighter">Admin Dashboard</h1>
+            <h1 className="font-black uppercase text-sm md:text-base tracking-tighter">Admin Dashboard</h1>
             <button onClick={() => signOut(auth)} className="bg-red-500 px-4 py-2 rounded-lg text-[10px] font-black uppercase">Logout</button>
           </div>
           <div className="p-4 md:p-6 overflow-x-auto">
@@ -137,12 +131,11 @@ export default function App() {
 
   if (showFees) {
     const feeData = [
-      { title: "Daycare", timing: "8:00 AM - 6:00 PM", monthly: "₹ 1,500", annual: "₹ 15,000", note: "Limited Slots Available", color: "#56a890" },
+      { title: "Daycare", timing: "8:00 AM - 6:00 PM", monthly: "₹ 1,500", annual: "₹ 15,000", color: "#56a890" },
       { title: "Montessori", timing: "9:00 AM - 12:30 PM", annual: "₹ 25,000", includes: "Books & Uniform", color: "#f28d7d" },
       { title: "LKG", timing: "M-F 2 PM | Sat 12:30 PM", annual: "₹ 27,000", includes: "Books & Uniform", color: "#b58d67" },
       { title: "UKG", timing: "M-F 2 PM | Sat 12:30 PM", annual: "₹ 29,000", includes: "Books & Uniform", color: "#143611" }
     ];
-
     return (
       <div className="min-h-screen bg-[#fafafa] py-12 px-6 font-sans">
         <div className="max-w-6xl mx-auto">
@@ -154,18 +147,10 @@ export default function App() {
             {feeData.map((item, idx) => (
               <div key={idx} className="bg-white rounded-[40px] p-8 shadow-xl border border-gray-100 flex flex-col items-center text-center">
                 <h3 className="text-2xl font-black uppercase mb-2" style={{ color: item.color }}>{item.title}</h3>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6 italic">{item.timing}</p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase mb-6 italic">{item.timing}</p>
                 <div className="flex-1 w-full space-y-4">
-                   {item.monthly && (
-                     <div className="bg-gray-50 p-4 rounded-2xl">
-                        <span className="block text-[9px] font-black text-gray-400 uppercase">Monthly</span>
-                        <span className="text-lg font-black text-black">{item.monthly}</span>
-                     </div>
-                   )}
-                   <div className="bg-[#143611] p-4 rounded-2xl text-white">
-                      <span className="block text-[9px] font-black opacity-60 uppercase">Annual Fee</span>
-                      <span className="text-lg font-black">{item.annual}</span>
-                   </div>
+                   {item.monthly && <div className="bg-gray-50 p-4 rounded-2xl"><span className="block text-[9px] font-black text-gray-400 uppercase">Monthly</span><span className="text-lg font-black text-black">{item.monthly}</span></div>}
+                   <div className="bg-[#143611] p-4 rounded-2xl text-white"><span className="block text-[9px] font-black opacity-60 uppercase">Annual Fee</span><span className="text-lg font-black">{item.annual}</span></div>
                    {item.includes && <p className="text-[10px] font-black text-[#56a890] uppercase">{item.includes}</p>}
                 </div>
               </div>
@@ -178,14 +163,13 @@ export default function App() {
 
   if (showLogin) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 font-sans relative" 
-           style={{ backgroundColor: '#143611', backgroundImage: 'radial-gradient(#1e4a1a 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
+      <div className="min-h-screen flex items-center justify-center px-4 font-sans relative" style={{ backgroundColor: '#143611', backgroundImage: 'radial-gradient(#1e4a1a 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
         <button onClick={() => setShowLogin(false)} className="absolute top-8 left-8 bg-white/10 hover:bg-white/20 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl transition-all active:scale-90 z-10">←</button>
         <div className="w-full max-w-md bg-white rounded-[40px] p-8 md:p-10 shadow-2xl relative z-10">
           <h2 className="text-xl md:text-2xl font-black uppercase text-[#143611] text-center mb-8 tracking-tighter">Management Portal</h2>
           <form onSubmit={handleLogin} className="space-y-4">
-            <input type="email" placeholder="EMAIL" required className="w-full p-4 border rounded-2xl font-bold bg-gray-50 outline-none focus:ring-2 ring-[#56a890]/20" onChange={(e) => setLoginEmail(e.target.value)} />
-            <input type="password" placeholder="PASSWORD" required className="w-full p-4 border rounded-2xl font-bold bg-gray-50 outline-none focus:ring-2 ring-[#56a890]/20" onChange={(e) => setLoginPass(e.target.value)} />
+            <input type="email" placeholder="EMAIL" required className="w-full p-4 border rounded-2xl font-bold bg-gray-50 outline-none" onChange={(e) => setLoginEmail(e.target.value)} />
+            <input type="password" placeholder="PASSWORD" required className="w-full p-4 border rounded-2xl font-bold bg-gray-50 outline-none" onChange={(e) => setLoginPass(e.target.value)} />
             <button className="w-full bg-[#143611] text-white py-4 rounded-2xl font-black uppercase shadow-lg active:scale-95 transition-transform">Login</button>
           </form>
         </div>
@@ -198,59 +182,61 @@ export default function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
         html { scroll-behavior: smooth; }
-        .hero-banner { width: 100vw; height: 85vh; background-image: url('/flex.png') !important; background-size: cover !important; background-position: center !important; display: flex; align-items: center; position: relative; }
-        @media (max-width: 768px) { .hero-banner { height: 65vh; background-position: 70% center !important; align-items: flex-start !important; padding-top: 50px; } }
-        .hero-banner::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.2) 60%, transparent 100%); }
-        .ticker-wrapper { flex: 1; overflow: hidden; white-space: nowrap; margin: 0 15px; }
-        .ticker-content { display: inline-block; animation: scrollTicker 25s linear infinite; color: #d00000; font-weight: 800; }
+        .hero-banner { width: 100vw; height: 85vh; background-image: url('/flex.png') !important; background-size: cover !important; background-position: center !important; display: flex; align-items: flex-start; position: relative; padding-top: 15vh; }
+        @media (max-width: 768px) { 
+          .hero-banner { height: 70vh; padding-top: 8vh; background-position: 65% center !important; } 
+          .hero-content { transform: translateX(-10%); }
+        }
+        .hero-banner::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.1) 70%, transparent 100%); }
+        .ticker-wrapper { flex: 1; overflow: hidden; white-space: nowrap; margin: 0 10px; }
+        .ticker-content { display: inline-block; animation: scrollTicker 20s linear infinite; color: #d00000; font-weight: 800; }
         @keyframes scrollTicker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .font-script { font-family: 'Great Vibes', cursive; }
       `}</style>
 
-      {/* 1. TOP TICKER */}
-      <div className="bg-[#FFD56B] text-[#143611] py-1.5 px-4 flex items-center justify-between text-[8px] md:text-[11px] font-black uppercase border-b border-[#e6c060] sticky top-0 z-[110]">
-        <span className="font-bold hidden sm:inline">📍 LAGGERE BENGALURU</span>
-        <div className="ticker-wrapper"><div className="ticker-content uppercase text-[#d00000]">kalpavruksha Early learning centre admission open for acadamic year 2026-27 ● kalpavruksha Early learning centre admission open for acadamic year 2026-27</div></div>
+      {/* 1. TOP TICKER (LOCATION VISIBLE ON MOBILE) */}
+      <div className="bg-[#FFD56B] text-[#143611] py-1.5 px-3 flex items-center justify-between text-[8px] md:text-[11px] font-black uppercase border-b border-[#e6c060] sticky top-0 z-[120]">
+        <span className="font-bold flex items-center gap-1 shrink-0">📍 LAGGERE</span>
+        <div className="ticker-wrapper"><div className="ticker-content uppercase text-[#d00000]">kalpavruksha Early learning centre admission open for acadamic year 2026-27 ● </div></div>
         <a href="https://wa.me/919902962379" className="font-bold shrink-0">📞 +91 99029 62379</a>
       </div>
 
-      {/* 2. HEADER */}
+      {/* 2. HEADER (CLEAN MOBILE NAV) */}
       <header className="sticky top-[28px] md:top-[34px] w-full z-[100] bg-white/95 backdrop-blur-md shadow-sm border-b">
-        <nav className="flex justify-between items-center px-4 md:px-8 py-1 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollTo('home')}>
-            <img src="/logo.png" alt="Logo" className="h-[40px] md:h-[72px]" />
-            <div className="text-left leading-none uppercase"><span className="text-[10px] md:text-[15px] font-black text-[#56a890] block">KALPAVRUKSHA</span><span className="text-[4px] md:text-[8px] text-gray-400 font-bold block">Early Learning Centre</span></div>
+        <nav className="flex flex-col md:flex-row justify-between items-center px-4 py-2 max-w-7xl mx-auto gap-2">
+          <div className="flex justify-between items-center w-full md:w-auto">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollTo('home')}>
+              <img src="/logo.png" alt="Logo" className="h-[35px] md:h-[60px]" />
+              <div className="text-left leading-none uppercase"><span className="text-[10px] md:text-[15px] font-black text-[#56a890] block">KALPAVRUKSHA</span><span className="text-[4px] md:text-[8px] text-gray-400 font-bold block">Early Learning Centre</span></div>
+            </div>
+            <button onClick={() => setShowForm('montessori')} className="md:hidden bg-[#f28d7d] text-white px-4 py-1.5 rounded-full font-black text-[9px] uppercase">Enroll</button>
           </div>
-          <div className="flex items-center gap-2 md:gap-8 overflow-visible">
-            <div className="hidden lg:flex items-center gap-8">
-              {['Home', 'About', 'Programs', 'Gallery'].map((item) => (
-                <button key={item} onClick={() => scrollTo(item.toLowerCase())} className={`text-[12px] font-black uppercase transition-colors ${activeSection === item.toLowerCase() ? 'text-[#f28d7d]' : 'text-gray-500'}`}>{item}</button>
-              ))}
-            </div>
-            
-            {/* DROPDOWN */}
-            <div className="relative group">
-              <button onClick={() => setOpenFacilities(!openFacilities)} className="text-[9px] md:text-[12px] font-black uppercase text-gray-500 flex items-center gap-0.5">
-                Facilities <span className="text-[#f28d7d]">{openFacilities ? '˄' : '˅'}</span>
-              </button>
-              {openFacilities && (
-                <div className="absolute top-full right-0 bg-white border shadow-2xl rounded-2xl py-3 w-40 md:w-48 z-[9999] mt-3 animate-in fade-in slide-in-from-top-1">
-                  <button onClick={() => { setShowFees(true); setOpenFacilities(false); }} className="px-5 py-3 text-[9px] md:text-[11px] font-black uppercase text-gray-500 hover:text-[#56a890] w-full text-left">Fees Structure</button>
-                  <button onClick={() => { setShowLogin(true); setOpenFacilities(false); }} className="px-5 py-3 text-[9px] md:text-[11px] font-black uppercase text-gray-500 hover:text-[#56a890] w-full text-left">Parents Login</button>
-                </div>
-              )}
-            </div>
+          
+          <div className="flex items-center gap-4 md:gap-8 overflow-x-auto w-full md:w-auto no-scrollbar py-1 justify-center md:justify-end border-t md:border-none">
+            {['Home', 'About', 'Programs', 'Gallery'].map((item) => (
+              <button key={item} onClick={() => scrollTo(item.toLowerCase())} className={`text-[9px] md:text-[12px] font-black uppercase whitespace-nowrap ${activeSection === item.toLowerCase() ? 'text-[#f28d7d]' : 'text-gray-500'}`}>{item}</button>
+            ))}
+            <button onClick={() => setOpenFacilities(!openFacilities)} className="text-[9px] md:text-[12px] font-black uppercase text-gray-500 flex items-center gap-0.5 whitespace-nowrap">
+              Facilities <span className="text-[#f28d7d]">{openFacilities ? '˄' : '˅'}</span>
+            </button>
+            <button onClick={() => setShowLogin(true)} className="text-[9px] md:text-[12px] font-black uppercase text-gray-500 whitespace-nowrap">Login</button>
+            <button onClick={() => setShowForm('montessori')} className="hidden md:block bg-[#f28d7d] text-white px-6 py-2 rounded-full font-black text-[11px] uppercase shadow-md active:scale-95">Enroll</button>
+          </div>
 
-            <button onClick={() => setShowForm('montessori')} className="bg-[#f28d7d] text-white px-4 py-2 md:px-6 md:py-2.5 rounded-full font-black text-[9px] md:text-[11px] uppercase shadow-md active:scale-95">Enroll</button>
-          </div>
+          {openFacilities && (
+            <div className="absolute top-full left-0 right-0 bg-white border-b shadow-xl py-2 flex flex-col md:w-48 md:left-auto md:right-8 md:rounded-2xl md:mt-2 z-[9999]">
+              <button onClick={() => { setShowFees(true); setOpenFacilities(false); }} className="px-5 py-3 text-[10px] font-black uppercase text-gray-500 hover:bg-gray-50 text-center md:text-left">Fees Structure</button>
+              <button onClick={() => { setShowLogin(true); setOpenFacilities(false); }} className="px-5 py-3 text-[10px] font-black uppercase text-gray-500 hover:bg-gray-50 text-center md:text-left">Parents Login</button>
+            </div>
+          )}
         </nav>
       </header>
 
-      {/* 3. HERO (MOVED 20% LEFT ON MOBILE) */}
-      <section id="home" className="hero-banner relative overflow-hidden">
-        <div className="px-6 md:ml-8 max-w-[90%] md:max-w-[70%] z-10 text-left transform max-sm:-translate-x-[20%] transition-transform">
-          <h1 className="text-[22px] md:text-[54px] font-[1000] leading-tight uppercase mb-4 min-h-[4em] md:min-h-[3.2em]">
+      {/* 3. HERO (PUSHED UP ON MOBILE) */}
+      <section id="home" className="hero-banner">
+        <div className="hero-content px-6 md:ml-8 max-w-[95%] md:max-w-[70%] z-10 text-left">
+          <h1 className="text-[20px] md:text-[54px] font-[1000] leading-[1.1] uppercase mb-3">
             <Typewriter texts={HERO_TEXTS} />
           </h1>
           <p className="text-[11px] md:text-lg font-bold text-[#444] italic">A happy start for little ones.</p>
@@ -260,13 +246,13 @@ export default function App() {
       {/* 4. ABOUT SECTION */}
       <section id="about" className="py-12 md:py-24 px-6 text-center max-w-7xl mx-auto">
         <div className="flex flex-col items-center leading-none mt-4 md:mt-8">
-           <div className="flex items-center justify-center gap-2 md:gap-8 mb-0">
-              <h2 className="text-[28px] md:text-[95px] font-script text-[#143611] tracking-tight">Welcome to</h2>
-              <img src="/kalpa.png" alt="Logo" className="h-[47px] md:h-[164px] w-auto object-contain" />
+           <div className="flex items-center justify-center gap-2 md:gap-8 mb-0 scale-90 md:scale-100">
+              <h2 className="text-[26px] md:text-[95px] font-script text-[#143611] tracking-tight">Welcome to</h2>
+              <img src="/kalpa.png" alt="Logo" className="h-[45px] md:h-[164px] w-auto object-contain" />
            </div>
-           <p className="text-[12px] md:text-2xl font-bold text-[#b58d67] uppercase tracking-widest inline-flex items-center -mt-3.5 md:-mt-8 lg:-mt-10">
+           <p className="text-[11px] md:text-2xl font-bold text-[#b58d67] uppercase tracking-widest inline-flex items-center -mt-2 md:-mt-8 lg:-mt-10">
              <span className="relative">
-               <img src="/leaf.png" alt="" className="absolute -top-4 md:-top-8 -left-2 md:-left-4 w-8 md:w-16 h-auto transform -rotate-[20deg] opacity-95 pointer-events-none" />
+               <img src="/leaf.png" alt="" className="absolute -top-3 md:-top-8 -left-1.5 md:-left-4 w-7 md:w-16 h-auto transform -rotate-[20deg] opacity-95" />
                E
              </span>
              ARLY LEARNING CENTRE
@@ -295,12 +281,12 @@ export default function App() {
       </section>
 
       {/* 6. GALLERY SECTION */}
-      <section id="gallery" className="py-16 md:py-24 px-6 text-center bg-white max-w-7xl mx-auto">
-        <h2 className="text-2xl md:text-4xl font-black uppercase mb-12 text-[#143611] tracking-widest">Our Gallery</h2>
+      <section id="gallery" className="py-16 md:py-24 px-4 text-center bg-white max-w-7xl mx-auto">
+        <h2 className="text-2xl md:text-4xl font-black uppercase mb-10 text-[#143611] tracking-widest">Our Gallery</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {[1,2,3,4,5,6,7,8].map((i) => (
-            <div key={i} className="aspect-square bg-gray-100 rounded-2xl md:rounded-3xl overflow-hidden hover:scale-95 transition-transform cursor-pointer shadow-sm">
-              <img src={`/gallery-${i}.jpg`} alt="Moments" className="w-full h-full object-cover" onError={(e) => {e.target.style.display='none'; e.target.parentElement.innerHTML=`<div class="flex items-center justify-center h-full text-[9px] font-black text-gray-200 uppercase">Snapshot ${i}</div>`}} />
+            <div key={i} className="aspect-square bg-gray-100 rounded-2xl overflow-hidden shadow-sm">
+              <img src={`/gallery-${i}.jpg`} alt="Moment" className="w-full h-full object-cover" onError={(e) => {e.target.style.display='none'; e.target.parentElement.innerHTML=`<div class="flex items-center justify-center h-full text-[9px] font-black text-gray-200">PHOTO ${i}</div>`}} />
             </div>
           ))}
         </div>
@@ -310,15 +296,14 @@ export default function App() {
       <section id="tuition" className="bg-[#143611] py-16 px-6 text-white text-center md:rounded-[60px] md:mx-6 mb-10 shadow-2xl">
         <h2 className="text-2xl md:text-5xl font-black uppercase mb-1">Tuition Centre</h2>
         <p className="text-[#90d2be] font-bold text-xs md:text-lg uppercase tracking-widest mb-8 italic">1st to 10th Standard</p>
-        <button onClick={() => setShowForm('tuition')} className="bg-[#f28d7d] text-white px-10 py-4 rounded-full font-black uppercase text-[10px] md:text-sm shadow-xl transition-all hover:bg-[#e87c6b] active:scale-95">Enroll Now</button>
+        <button onClick={() => setShowForm('tuition')} className="bg-[#f28d7d] text-white px-10 py-4 rounded-full font-black uppercase text-[10px] md:text-sm shadow-xl active:scale-95">Enroll Now</button>
       </section>
 
       <footer className="bg-[#143611] py-8 text-center text-gray-500 text-[8px] font-black uppercase tracking-[0.2em]">© 2026 Kalpavruksha Early Learning Centre.</footer>
 
-      {/* FLOATING WHATSAPP */}
-      <a href="https://wa.me/919902962379" target="_blank" className="fixed bottom-5 right-5 flex items-center z-[9999]">
-        <div className="bg-white text-black px-4 py-2 rounded-xl font-black text-xs mr-2 shadow-lg border hidden sm:block">Enquire Now</div>
-        <div className="bg-[#25D366] w-12 h-12 rounded-full flex items-center justify-center shadow-xl overflow-hidden"><img src="/WhatsApp-Logo.wine.png" alt="WA" className="w-[70%] h-auto" /></div>
+      {/* WHATSAPP */}
+      <a href="https://wa.me/919902962379" target="_blank" className="fixed bottom-5 right-5 z-[9999] active:scale-90 transition-transform">
+        <div className="bg-[#25D366] w-12 h-12 rounded-full flex items-center justify-center shadow-xl overflow-hidden border-2 border-white"><img src="/WhatsApp-Logo.wine.png" alt="WA" className="w-[75%] h-auto" /></div>
       </a>
     </div>
   );
