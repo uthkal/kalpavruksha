@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate, Navigate } from 'react-router-dom';
 import { db, auth } from './firebase'; 
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 
 // --- PERFECTED ANIMATION TYPEWRITER ---
 const Typewriter = ({ texts }) => {
@@ -190,6 +191,13 @@ function FeesStructurePage() {
               fee: "₹ 29,000", 
               color: "bg-[#E6F7F0] border-emerald-200", 
               text: "text-[#1B6653]" 
+            },
+            { 
+              program: "Daycare", 
+              timing: "8:30 AM - 6:00 PM", 
+              fee: "₹ 15,000 (Annual) | ₹ 1,500 (Monthly)", 
+              color: "bg-[#F3F0FF] border-purple-200", 
+              text: "text-[#4A3280]" 
             }
           ].map((item, idx) => (
             <div key={idx} className={`${item.color} p-6 rounded-[28px] border-2 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-all hover:scale-[1.01]`}>
@@ -198,12 +206,12 @@ function FeesStructurePage() {
                 <h3 className="text-xl font-black uppercase text-black">{item.program}</h3>
                 <div className="mt-2 flex flex-wrap gap-2 text-xs font-bold text-gray-600">
                   <span className="bg-white/80 px-3 py-1 rounded-full border">⏰ {item.timing}</span>
-                  <span className="bg-white/80 px-3 py-1 rounded-full border">🎒 Includes Books & Uniform</span>
+                  {item.program !== "Daycare" && <span className="bg-white/80 px-3 py-1 rounded-full border">🎒 Includes Books & Uniform</span>}
                 </div>
               </div>
               <div className="text-left md:text-right shrink-0">
-                <span className="text-[9px] font-black uppercase tracking-wider text-gray-400 block">Annual Term Fee</span>
-                <p className={`text-2xl font-[1000] tracking-tight ${item.text}`}>{item.fee}</p>
+                <span className="text-[9px] font-black uppercase tracking-wider text-gray-400 block">Fee Details</span>
+                <p className={`text-xl font-[1000] tracking-tight ${item.text}`}>{item.fee}</p>
               </div>
             </div>
           ))}
@@ -227,9 +235,8 @@ function VideoViewPage() {
   return (
     <div className="min-h-[85vh] bg-black text-white flex flex-col justify-center items-center p-4 md:p-8">
       <div className="w-full max-w-5xl space-y-4">
-        <div className="flex justify-between items-center py-2 border-b border-white/10">
+        <div className="flex items-center py-2 border-b border-white/10">
           <button onClick={() => navigate(-1)} className="text-xs font-black uppercase tracking-wider bg-white/10 text-white px-4 py-2 rounded-xl hover:bg-white/20 transition-all">← Return</button>
-          <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Media Playing Mode: {realVideoUrl}</span>
         </div>
         <div className="w-full aspect-video bg-neutral-900 rounded-[30px] overflow-hidden shadow-2xl border border-white/5 relative">
           <video src={realVideoUrl} controls autoPlay className="w-full h-full object-contain" />
@@ -258,7 +265,8 @@ function AllMediaPortfolioPage() {
             {[
               { s: "activity.mp4", post: "/thumb1.png" },
               { s: "activity2.mp4", post: "/thumb2.png" },
-              { s: "playwithlearn.mp4", post: "/thumb4.png" }
+              { s: "playwithlearn.mp4", post: "/thumb4.png" },
+              { s: "envior1.mp4", post: "/kalpaa.png" } 
             ].map((v, i) => (
               <div key={i} onClick={() => navigate(`/video-view/${encodeURIComponent(v.s)}`)} className="bg-neutral-100 rounded-[32px] overflow-hidden shadow-md relative aspect-video border border-gray-200 cursor-pointer hover:scale-[1.01] transition-all group">
                 <img src={v.post} alt="Video Poster" className="w-full h-full object-cover" />
@@ -420,7 +428,7 @@ function LandingPage() {
         <div className="flex flex-col items-center justify-center leading-none space-y-4">
            <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 mb-0">
               <h2 className="text-[32px] md:text-[85px] font-script text-[#143611] tracking-tight leading-none">Welcome to</h2>
-              <img src="/kalpa.png" alt="Logo" className="h-[55px] md:h-[110px] w-auto object-contain block mt-1" />
+              <img src="/kalpa.png" alt="Logo" className="h-[72px] md:h-[143px] w-auto object-contain block mt-1" />
            </div>
            <p className="text-[11px] md:text-2xl font-bold text-[#b58d67] uppercase tracking-widest block pt-0 mt-0">
              EARLY LEARNING CENTRE
@@ -463,8 +471,8 @@ function LandingPage() {
             </div>
           </div>
 
-          <div onClick={() => navigate(`/video-view/${encodeURIComponent('activity2.mp4')}`)} className="bg-neutral-100 rounded-[32px] overflow-hidden shadow-lg relative aspect-video border border-gray-200 cursor-pointer hover:scale-[1.01] transition-all group">
-            <img src="/thumb2.png" alt="Thumbnail 2" className="w-full h-full object-cover" />
+          <div onClick={() => navigate(`/video-view/${encodeURIComponent('envior1.mp4')}`)} className="bg-neutral-100 rounded-[32px] overflow-hidden shadow-lg relative aspect-video border border-gray-200 cursor-pointer hover:scale-[1.01] transition-all group">
+            <img src="/kalpaa.png" alt="Nature Crafts" className="w-full h-full object-cover" />
             <div className="absolute inset-0 flex items-center justify-center bg-black/15 group-hover:bg-black/25 transition-colors">
               <div className="w-14 h-14 bg-white/95 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
                 <span className="text-2xl text-black ml-1">▶</span>
@@ -489,34 +497,69 @@ function LandingPage() {
   );
 }
 
-// --- MANAGEMENT LOGIN PAGE COMPONENT ---
+// --- SECURE MANAGEMENT LOGIN PAGE COMPONENT ---
 function ManagementLoginPage() {
   const navigate = useNavigate();
   const [loginInput, setLoginInput] = useState('');
   const [password, setPassword] = useState('');
   const [isOtpMode, setIsOtpMode] = useState(false);
   const [otpPhone, setOtpPhone] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
+    console.log("BUTTON CLICKED! Attempting login for:", loginInput);
+    setError('');
+    
+    if (!loginInput || !password) {
+      setError('Email and password are required.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, loginInput, password);
+      console.log("Authentication successful.");
+      navigate('/dashboard'); 
+    } catch (err) {
+      console.error("Authentication Error:", err.code);
+      setError('Invalid credentials. Access denied.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-[80vh] bg-gray-100 py-16 px-4 flex items-center justify-center">
       <div className="w-full max-w-md bg-white rounded-[40px] shadow-xl border overflow-hidden">
         <div className="bg-[#143611] p-8 text-white text-center relative">
           <button type="button" onClick={() => navigate('/')} className="absolute left-6 top-8 text-xs font-black uppercase border border-white/20 rounded-xl px-3 py-1.5 text-white">← Home</button>
-          <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white">Management Hub</h1>
+          <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-white">Management Portal</h1>
         </div>
+        
         {!isOtpMode ? (
-          <form onSubmit={(e) => e.preventDefault()} className="p-8 space-y-5">
-            <input type="text" required placeholder="EMAIL OR PHONE" className="w-full p-4 border rounded-2xl font-bold bg-gray-50 text-xs text-black" value={loginInput} onChange={(e) => setLoginInput(e.target.value)} />
-            <input type="password" required placeholder="PASSWORD" className="w-full p-4 border rounded-2xl font-bold bg-gray-50 text-xs text-black" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button type="submit" className="w-full bg-[#143611] text-white py-4 rounded-2xl font-black uppercase text-xs">Secure Entry Log</button>
-            <button type="button" onClick={() => setIsOtpMode(true)} className="text-[11px] font-black text-[#f28d7d] uppercase tracking-wide block mx-auto mt-2">Login with OTP instead</button>
+          <form onSubmit={handleEmailLogin} className="p-8 space-y-5">
+            {error && <div className="bg-red-50 text-red-600 text-xs font-bold p-3 rounded-xl border border-red-200 text-center uppercase tracking-wider">{error}</div>}
+            
+            <input type="email" required placeholder="EMAIL ADDRESS" className="w-full p-4 border rounded-2xl font-bold bg-gray-50 text-xs text-black" value={loginInput} onChange={(e) => setLoginInput(e.target.value)} disabled={isLoading} />
+            <input type="password" required placeholder="PASSWORD" className="w-full p-4 border rounded-2xl font-bold bg-gray-50 text-xs text-black" value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
+            
+            <button type="submit" disabled={isLoading} className={`w-full bg-[#143611] text-white py-4 rounded-2xl font-black uppercase text-xs transition-opacity ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90'}`}>
+              {isLoading ? 'Authenticating...' : 'Secure Entry Log'}
+            </button>
+            
+            <button type="button" onClick={() => { setIsOtpMode(true); setError(''); }} className="text-[11px] font-black text-[#f28d7d] uppercase tracking-wide block mx-auto mt-2">Login with OTP instead</button>
           </form>
         ) : (
-          <form onSubmit={(e) => e.preventDefault()} className="p-8 space-y-5">
-            <input type="tel" required placeholder="REGISTERED MOBILE" className="w-full p-4 border rounded-2xl font-bold bg-gray-50 text-xs text-black" value={otpPhone} onChange={(e) => setOtpPhone(e.target.value)} />
+          <form onSubmit={(e) => { e.preventDefault(); alert("OTP setup requires RecaptchaVerifier."); }} className="p-8 space-y-5">
+             {error && <div className="bg-red-50 text-red-600 text-xs font-bold p-3 rounded-xl border border-red-200 text-center uppercase tracking-wider">{error}</div>}
+            
+            <input type="tel" required placeholder="REGISTERED MOBILE (+91...)" className="w-full p-4 border rounded-2xl font-bold bg-gray-50 text-xs text-black" value={otpPhone} onChange={(e) => setOtpPhone(e.target.value)} />
+            
             <div className="flex gap-3">
-              <button type="button" onClick={() => setIsOtpMode(false)} className="w-1/3 bg-gray-100 text-gray-500 py-4 rounded-2xl font-black uppercase text-[10px]">Cancel</button>
-              <button type="submit" className="w-2/3 bg-[#56a890] text-white py-4 rounded-2xl font-black uppercase text-xs">Transmit OTP</button>
+              <button type="button" onClick={() => { setIsOtpMode(false); setError(''); }} className="w-1/3 bg-gray-100 text-gray-500 py-4 rounded-2xl font-black uppercase text-[10px] hover:bg-gray-200 transition-colors">Cancel</button>
+              <button type="submit" className="w-2/3 bg-[#56a890] text-white py-4 rounded-2xl font-black uppercase text-xs hover:bg-opacity-90 transition-opacity">Transmit OTP</button>
             </div>
           </form>
         )}
@@ -528,26 +571,40 @@ function ManagementLoginPage() {
 // --- ENROLLMENT PAGE COMPONENT ---
 function EnrollPage() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ studentName: '', phone: '', parentName: '', age: '', program: 'Montessori', class: '1st Standard', board: 'State Board' });
+  const [formData, setFormData] = useState({ 
+    firstName: '', 
+    lastName: '', 
+    phone: '', 
+    program: 'Montessori' 
+  });
 
   return (
     <div className="min-h-[85vh] bg-gray-50 py-12 px-4 md:px-8">
       <div className="max-w-3xl mx-auto bg-white rounded-[40px] shadow-xl border overflow-hidden">
         <div className="bg-[#143611] p-8 text-white text-center relative">
           <button type="button" onClick={() => navigate('/')} className="absolute left-6 top-8 text-xs font-black uppercase border border-white/20 rounded-xl px-3 py-1.5 text-white">← Cancel</button>
-          <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white">Admission Registry</h1>
+          <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white">Admission Enquiry</h1>
         </div>
         <div className="p-8 space-y-4">
-          <input type="text" placeholder="STUDENT FULL NAME" className="w-full p-4 border rounded-2xl font-bold text-xs text-black bg-gray-50 outline-none" onChange={(e) => setFormData({...formData, studentName: e.target.value})} />
-          <input type="tel" placeholder="PARENT PHONE NUMBER" className="w-full p-4 border rounded-2xl font-bold text-xs text-black bg-gray-50 outline-none" onChange={(e) => setFormData({...formData, phone: e.target.value})} />
-          <button type="button" onClick={() => alert('Processing Registration Data Profiles...')} className="w-full bg-[#143611] text-white py-4 rounded-2xl font-black uppercase text-xs tracking-wider">Submit Enrollment File</button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" placeholder="FIRST NAME" className="w-full p-4 border rounded-2xl font-bold text-xs text-black bg-gray-50 outline-none" onChange={(e) => setFormData({...formData, firstName: e.target.value})} />
+            <input type="text" placeholder="LAST NAME" className="w-full p-4 border rounded-2xl font-bold text-xs text-black bg-gray-50 outline-none" onChange={(e) => setFormData({...formData, lastName: e.target.value})} />
+          </div>
+          <input type="tel" placeholder="CONTACT NUMBER" className="w-full p-4 border rounded-2xl font-bold text-xs text-black bg-gray-50 outline-none" onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+          <select className="w-full p-4 border rounded-2xl font-bold text-xs text-black bg-gray-50 outline-none" onChange={(e) => setFormData({...formData, program: e.target.value})}>
+            <option value="Montessori">Montessori</option>
+            <option value="LKG">LKG</option>
+            <option value="UKG">UKG</option>
+            <option value="Daycare">Daycare</option>
+          </select>
+          <button type="button" onClick={() => alert('Processing Admission Enquiry for ' + formData.firstName + '...')} className="w-full bg-[#143611] text-white py-4 rounded-2xl font-black uppercase text-xs tracking-wider">Submit Enquiry</button>
         </div>
       </div>
     </div>
   );
 }
 
-// --- NAVIGATION MENU ACTION COMPONENT ---
+// --- GLOBAL NAVIGATION MENU ---
 function GlobalHeaderNavigation() {
   const [openFacilities, setOpenFacilities] = useState(false);
   const navigate = useNavigate();
@@ -564,6 +621,7 @@ function GlobalHeaderNavigation() {
           <img src="/logo.png" alt="Logo" className="h-[40px] md:h-[60px]" />
           <div className="text-left uppercase leading-none">
             <span className="text-[12px] md:text-[16px] font-black text-[#56a890] block">KALPAVRUKSHA</span>
+            <span className="text-[8px] font-black text-[#f28d7d] block tracking-widest mt-0.5">EARLY LEARNING CENTRE</span>
           </div>
         </Link>
         
@@ -599,6 +657,50 @@ function GlobalHeaderNavigation() {
   );
 }
 
+// --- SECURE ROUTE BOUNCER ---
+function ProtectedRoute({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return unsubscribe; // Cleanup listener on unmount
+  }, []);
+
+  if (loading) {
+    return <div className="min-h-[85vh] flex items-center justify-center font-black uppercase tracking-widest text-xs">Verifying Security Clearance...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/management-login" replace />;
+  }
+
+  return children;
+}
+
+// --- SECURE DASHBOARD VIEW ---
+function ManagementDashboard() {
+  const navigate = useNavigate();
+  return (
+    <div className="min-h-[85vh] bg-gray-50 p-10 flex flex-col items-center justify-center">
+      <h1 className="text-3xl font-black uppercase tracking-widest text-[#143611] mb-6">Secure Dashboard</h1>
+      <p className="text-sm font-bold text-gray-500 mb-8 uppercase">Welcome to the inner sanctum.</p>
+      <button 
+        onClick={() => {
+          signOut(auth).then(() => navigate('/'));
+        }} 
+        className="bg-red-600 text-white px-8 py-3 rounded-xl font-black uppercase text-xs tracking-wider shadow-lg hover:bg-red-700 transition-colors"
+      >
+        Sign Out Securely
+      </button>
+    </div>
+  );
+}
+
+
 // --- MASTER COMPONENT ROUTER CONTAINER ---
 export default function App() {
   return (
@@ -625,11 +727,10 @@ export default function App() {
           <a href="https://wa.me/919902962379" target="_blank" rel="noreferrer" className="font-bold text-black shrink-0 hover:opacity-80 transition-opacity">📞 +91 99029 62379</a>
         </div>
 
-        {/* FIX: Render navigation component cleanly inside router tree container scope block */}
         <GlobalHeaderNavigation />
 
-        {/* ROUTES CONTAINER */}
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/programs/:programId" element={<ProgramDetailPage />} />
           <Route path="/enroll" element={<EnrollPage />} />
@@ -640,6 +741,16 @@ export default function App() {
           <Route path="/video-view/:videoSrc" element={<VideoViewPage />} />
           <Route path="/all-media" element={<AllMediaPortfolioPage />} />
           <Route path="/fees" element={<FeesStructurePage />} />
+          
+          {/* Private Secure Route */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <ManagementDashboard />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
 
         <footer className="bg-[#143611] py-8 text-center text-gray-500 text-[9px] font-black uppercase tracking-widest">© 2026 Kalpavruksha Early Learning Centre.</footer>
